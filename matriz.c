@@ -43,23 +43,33 @@ As estruturas O-> representam cada elemento diferente de zero  da matriz.
 struct elemento{
 	int i;
 	int j;
-	float valor;
+	double valor;
 	struct elemento *right;
 	struct elemento *down;
 };
 
 struct fila{	//Linha ou coluna da matriz
-	int len;
+	int n_elem;	//Número de elementos diferentes de 0 na fila
 	T_ELEM *first;
 };
 
 struct matriz{
 	struct{	//Vetor de filas que guarda seu tamanho
 		int len;
-		T_FILA *filas;
-	} linha, coluna;
+		T_FILA *fila;
+	} linhas, colunas;
 
 };
+
+T_MAT *cria_matriz(int m, int n){
+	T_MAT *mat;
+	mat = calloc(1,sizeof(T_MAT));
+	mat->linhas.len = m;
+	mat->colunas.len = n;
+	mat->linhas.fila = calloc(m, sizeof(T_FILA));
+	mat->colunas.fila = calloc(n, sizeof(T_FILA));
+	return mat;
+}
 
 double le_elem(int i, int j, T_MAT *mat){
 	//Essa função recebe um número de linha, um de coluna e uma matriz e
