@@ -61,6 +61,16 @@ struct matriz{
 
 };
 
-float le_elem(int i, int j, T_MAT *mat);
-void adiciona_elem(int i, int j, double valor, T_MAT *mat);
-void remove_elem(int i, int j, T_MAT *mat);
+double le_elem(int i, int j, T_MAT *mat){
+	//Essa função recebe um número de linha, um de coluna e uma matriz e
+	//retorna o valor do elemento naquela poisição da matriz
+}
+
+void adiciona_elem(int i, int j, double valor, T_MAT *mat){
+	//Essa função recebe um número de linha, um de coluna, um valor e uma
+	//matriz e insere valor como elemento daquela posição na matriz
+}
+void remove_elem(int i, int j, T_MAT *mat){
+	//Essa função recebe um número de linha, um de coluna e uma matriz e
+	//zera o elemento daquela posição na matriz
+}
