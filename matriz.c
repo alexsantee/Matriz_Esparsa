@@ -61,13 +61,13 @@ struct matriz{
 
 };
 
-T_MAT *cria_matriz(int m, int n){
+T_MAT *cria_matriz(int linhas, int colunas){
 	T_MAT *mat;
 	mat = calloc(1,sizeof(T_MAT));
-	mat->linhas.len = m;
-	mat->colunas.len = n;
-	mat->linhas.fila = calloc(m, sizeof(T_FILA));
-	mat->colunas.fila = calloc(n, sizeof(T_FILA));
+	mat->linhas.len = linhas;
+	mat->colunas.len = colunas;
+	mat->linhas.fila = calloc(linhas, sizeof(T_FILA));
+	mat->colunas.fila = calloc(colunas, sizeof(T_FILA));
 	return mat;
 }
 
