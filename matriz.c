@@ -233,65 +233,6 @@ void remove_elem(int i, int j, T_MAT *mat){
 	}
 }
 
-T_ELEM *acessa_fila(T_FILA fila, int pos, char l_c){//l_c acessa linha ou coluna
-	//Essa função acessa o item na posição pos (índice 0) de uma fila
-	//(linha caso l_c == 'l' e coluna caso l_c == 'c') e retorna ponteiro
-	//para o elemento daquela posição. Retorna NULL caso seja 0.
-	T_ELEM *elem;
-	elem = fila.first;
-	while (elem != NULL)
-	{
-		if (l_c == 'l')
-		{
-			if (elem->j < pos){elem = elem->right;}
-			else if(elem->j == pos){return elem;}
-			else {return NULL;}
-		}
-
-		else if (l_c == 'c')
-		{
-			if (elem->i < pos){elem = elem->down;}
-			else if(elem->i == pos){return elem;}
-			else {return NULL;}
-		}
-	}
-	return NULL;
-}
-
-T_ELEM *acessa_linha(T_FILA linha, int j)
-{
-	//Essa função recebe uma linha e o número da coluna em que está o
-	//elemento e retorna um ponteiro para ele. retorna NULL caso ele
-	//seja igual a 0
-	return acessa_fila(linha, j, 'l');
-}
-
-T_ELEM *acessa_coluna(T_FILA coluna, int i)
-{
-	//Essa função recebe uma coluna e o número da linha em que está o
-	//elemento e retorna um ponteiro para ele. retorna NULL caso o elemento
-	//seja igual a 0
-	return acessa_fila(coluna, i, 'c');
-}
-
-T_ELEM *encontra_elem(T_MAT *mat, int i, int j)
-{
-	//Essa função recebe uma matriz e as posições i e j de um elemento e
-	//retorna um ponteiro para esse elemento. retorna NULL caso ele seja
-	//igual a zero
-	T_ELEM *elem;
-	if(mat->linhas[i].n_elem < mat->colunas[j].n_elem)
-	{
-		elem = acessa_linha(mat->linhas[i], j);
-	}
-	else
-	{
-		elem = acessa_coluna(mat->colunas[j], i);
-	}
-	return elem;
-
-}
-
 double soma_linha(int i,T_MAT*mat)//i:numero da linha
 {
 double soma=0;
@@ -355,6 +296,65 @@ double determinante(T_MAT *mat)
 		det += neg*determinante( remove_lin_col(i,1,mat) );
 	}
 	return det;
+}
+
+T_ELEM *acessa_fila(T_FILA fila, int pos, char l_c){//l_c acessa linha ou coluna
+	//Essa função acessa o item na posição pos (índice 0) de uma fila
+	//(linha caso l_c == 'l' e coluna caso l_c == 'c') e retorna ponteiro
+	//para o elemento daquela posição. Retorna NULL caso seja 0.
+	T_ELEM *elem;
+	elem = fila.first;
+	while (elem != NULL)
+	{
+		if (l_c == 'l')
+		{
+			if (elem->j < pos){elem = elem->right;}
+			else if(elem->j == pos){return elem;}
+			else {return NULL;}
+		}
+
+		else if (l_c == 'c')
+		{
+			if (elem->i < pos){elem = elem->down;}
+			else if(elem->i == pos){return elem;}
+			else {return NULL;}
+		}
+	}
+	return NULL;
+}
+
+T_ELEM *acessa_linha(T_FILA linha, int j)
+{
+	//Essa função recebe uma linha e o número da coluna em que está o
+	//elemento e retorna um ponteiro para ele. retorna NULL caso ele
+	//seja igual a 0
+	return acessa_fila(linha, j, 'l');
+}
+
+T_ELEM *acessa_coluna(T_FILA coluna, int i)
+{
+	//Essa função recebe uma coluna e o número da linha em que está o
+	//elemento e retorna um ponteiro para ele. retorna NULL caso o elemento
+	//seja igual a 0
+	return acessa_fila(coluna, i, 'c');
+}
+
+T_ELEM *encontra_elem(T_MAT *mat, int i, int j)
+{
+	//Essa função recebe uma matriz e as posições i e j de um elemento e
+	//retorna um ponteiro para esse elemento. retorna NULL caso ele seja
+	//igual a zero
+	T_ELEM *elem;
+	if(mat->linhas[i].n_elem < mat->colunas[j].n_elem)
+	{
+		elem = acessa_linha(mat->linhas[i], j);
+	}
+	else
+	{
+		elem = acessa_coluna(mat->colunas[j], i);
+	}
+	return elem;
+
 }
 
 T_MAT *remove_lin_col(int i, int j, T_MAT *mat)
