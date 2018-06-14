@@ -113,7 +113,7 @@ void adiciona_elem(int i, int j, double valor, T_MAT *mat){
 		return;// SAIR COM ERRO
 	}
 
-	if(valor==0)
+	if(valor==0.0)
 	{
 		remove_elem(i,j,mat);
 		return;
@@ -210,6 +210,18 @@ void adiciona_elem(int i, int j, double valor, T_MAT *mat){
 void remove_elem(int i, int j, T_MAT *mat){
 	//Essa função recebe um número de linha, um de coluna e uma matriz e
 	//zera o elemento daquela posição na matriz
+	T_ELEM *elem;
+	if( (elem=encontra_elem(mat,i,j)) == NULL ){return;}
+	else
+	{
+		elem->right->left=elem->left;
+		elem->left->right=elem->right;
+		elem->down->up=elem->up;
+		elem->up->down=elem->down;
+		free(elem);
+		mat->linhas[i].n_elem--;
+		mat->colunas[j].n_elem--;
+	}
 }
 
 T_ELEM *acessa_fila(T_FILA fila, int pos, char l_c){//l_c acessa linha ou coluna
