@@ -1,5 +1,7 @@
 #include <stdlib.h>	//Usado para reservar memória para a matriz
 
+#define ERR_OUT_OF_MATRIX -1
+#define ERR_NON_SQR_MAT_DET -2
 //structs públicos
 typedef struct matriz T_MAT;
 
@@ -15,12 +17,14 @@ void adiciona_elem(int i, int j, double valor, T_MAT *mat);
 void remove_elem(int i, int j, T_MAT *mat);
 double soma_linha(int i,T_MAT*mat);
 double soma_coluna(int j,T_MAT*mat);
+double determinante(T_MAT *mat);
 
 //funções privadas
 T_ELEM *acessa_fila(T_FILA fila, int pos, char l_c);
 T_ELEM *acessa_linha(T_FILA linha, int j);
 T_ELEM *acessa_coluna(T_FILA coluna, int i);
 T_ELEM *encontra_elem(T_MAT *mat, int i, int j);
+T_MAT *remove_lin_col(int i, int j, T_MAT *mat);
 
 /*
 Este programa usa a seguinte estrutura de dados para guardar os elementos de
@@ -96,6 +100,9 @@ T_MAT *cria_matriz(int m, int n){
 void apaga_matriz(T_MAT *mat)
 {
 	//Limpa todos os endereços reservados da memória.
+
+	//NÃO ESQUECER
+
 }
 
 double le_elem(int i, int j, T_MAT *mat){
@@ -112,7 +119,7 @@ void adiciona_elem(int i, int j, double valor, T_MAT *mat){
 
 	if(i >= mat->m || j >= mat->n)	//Elemento fora da matriz
 	{
-		return;// SAIR COM ERRO
+		exit(ERR_OUT_OF_MATRIX);
 	}
 
 	if(valor==0.0)
@@ -296,7 +303,7 @@ if(mat->linhas[i].n_elem!=0)
     
     while(aux!=NULL){
         soma+=aux->valor;
-        aux=aux.right;
+        aux=aux->right;
         }
     }
 return (soma);
@@ -313,8 +320,77 @@ if(mat->colunas[j].n_elem!=0)
     
     while(aux!=NULL){
         soma+=aux->valor;
-        aux=aux.down;
+        aux=aux->down;
         }
     }
 return (soma);
+}
+
+double determinante(T_MAT *mat)
+{
+	//Calcula o determinante de uma matriz quadrada
+	if (mat->m!=mat->n)	//Caso matriz não quadrada
+	{
+		exit(ERR_NON_SQR_MAT_DET);
+	}
+	if (mat->m == 1)	//BASE: matriz de ordem 1
+	{
+		return mat->linhas[0].first->valor;
+	}
+		
+	//Caso fila de zeros
+	int i;
+	for (i=0; i < mat->m; i++)
+	{
+		if(mat->linhas[i].first == NULL){return 0.0;}
+		if(mat->colunas[i].first == NULL){return 0.0;}
+	}
+
+	//Teorema de Laplace
+	double det = 0.0;
+	char neg = 1;	//Sinal que alterna
+	for (i=0; i < mat->m; i++, neg*=-1)
+	{
+		//OTIMIZAR PARA MENOR FILA
+		det += neg*determinante( remove_lin_col(i,1,mat) );
+	}
+	return det;
+}
+
+T_MAT *remove_lin_col(int i, int j, T_MAT *mat)
+{
+	T_MAT *new;
+	new = cria_matriz(mat->m -1, mat->n -1);
+	int iii;
+	int jjj;
+	double valor;
+	//Copia os elementos de mat ajustados segundo o corte
+	for (iii=0; iii < new->m; iii++)
+	{
+		for(jjj=0; jjj < new->n; jjj++)
+		{
+			if (iii<i && jjj<j)	//Região antes do corte
+			{
+				valor = le_elem(i,j,mat);
+				adiciona_elem(i,j,valor,new);
+			}
+			if (iii<i && jjj>j)	//A direita do corte
+			{
+				valor = le_elem(i,j,mat);
+				adiciona_elem(i,j-1,valor,new);
+			}
+			if (iii>i && jjj<j)	//Abaixo do corte
+			{
+				valor = le_elem(i,j,mat);
+				adiciona_elem(i-1,j,valor,new);
+			}
+			if (iii>i && jjj>j)	//Região depois do corte
+			{
+				valor = le_elem(i,j,mat);
+				adiciona_elem(i-1,j-1,valor,new);
+			}
+
+		}
+	}
+	return new;
 }
