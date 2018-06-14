@@ -56,7 +56,7 @@ zero naquela fila.
 
 As estruturas O-> representam cada elemento diferente de zero  da matriz.
               |   A estrutura guarda o valor do elemento, e ponteiros para
-              v   os próximos elemento tanto em cima quanto em baixo.
+              v   os elementos de cima, baixo, esquerda e direita.
 */
 
 struct elemento{
@@ -75,20 +75,19 @@ struct fila{	//Linha ou coluna da matriz
 };
 
 struct matriz{
-	struct{	//Vetor de filas que guarda seu tamanho
-		int len;
-		T_FILA *fila;
-	} linhas, colunas;
-
+	T_FILA *linhas;
+	T_FILA *colunas;
+	int m;
+	int n;
 };
 
 T_MAT *cria_matriz(int m, int n){
 	T_MAT *mat;
 	mat = calloc(1,sizeof(T_MAT));
-	mat->linhas.len = m;
-	mat->colunas.len = n;
-	mat->linhas.fila = calloc(m, sizeof(T_FILA));
-	mat->colunas.fila = calloc(n, sizeof(T_FILA));
+	mat->m = m;
+	mat->n = n;
+	mat->linhas = calloc(m, sizeof(T_FILA));
+	mat->colunas = calloc(n, sizeof(T_FILA));
 	return mat;
 }
 
@@ -107,22 +106,113 @@ double le_elem(int i, int j, T_MAT *mat){
 }
 
 void adiciona_elem(int i, int j, double valor, T_MAT *mat){
-//-----------------------APENAS PARA TESTAR--------------------------------//
-	//Essa função recebe um número de linha, um de coluna, um valor e uma
 	//matriz e insere valor como elemento daquela posição na matriz
+
+	if(i >= mat->m || j >= mat->n)	//Elemento fora da matriz
+	{
+		return;// SAIR COM ERRO
+	}
+
+	if(valor==0)
+	{
+		remove_elem(i,j,mat);
+		return;
+	}
+
 	T_ELEM *elem;
+	if( ( elem=encontra_elem(mat,i,j) ) != NULL)	//Já existe elem em i,j
+	{
+		elem->valor = valor;
+		return;
+	}
+
+	//Será de fato adicionado um novo elemento
 	elem = calloc(1, sizeof(T_ELEM));
-	elem->valor = valor;
-	mat->linhas.fila[i].first = elem;
-	mat->colunas.fila[j].first = elem;
+	elem->i = i;
+	elem->j = j;
+
+	//Adiciona elemento na linha
+	if(mat->linhas[i].n_elem == 0)	//A linha está vazia
+	{
+		mat->linhas[i].first = elem;
+	}
+	else	//Já existe(m) elemento(s) na linha
+	{
+		T_ELEM *tmp;
+		tmp = mat->linhas[i].first;	//Primeiro elemento
+		if (tmp->j > j)	//elem é primeiro elemento
+		{
+			mat->linhas[i].first = elem;
+			elem->right = tmp;
+			tmp->left = elem;
+		}
+		else
+		{
+			while(tmp->j < j && tmp->right != NULL)
+			{
+				tmp = tmp->right;
+			}
+			if (tmp->j < j)	//elem está entre dois outros
+			{
+				elem->right=tmp;
+				elem->left=tmp->left;
+				tmp->left->right=elem;
+				tmp->left = elem;
+			}
+			else	//elem é o último elemento
+			{
+				elem->left = tmp;
+				tmp->right = elem;
+			}
+		}
+	}
+
+	//Adiciona elemento na coluna
+	if(mat->colunas[j].n_elem == 0)	//A linha está vazia
+	{
+		mat->colunas[j].first = elem;
+	}
+	else	//Já existe(m) elemento(s) na linha
+	{
+		T_ELEM *tmp;
+		tmp = mat->colunas[j].first;	//Primeiro elemento
+		if (tmp->i > i)	//elem é primeiro elemento
+		{
+			mat->colunas[j].first = elem;
+			elem->down = tmp;
+			tmp->up = elem;
+		}
+		else
+		{
+			while(tmp->i < i && tmp->down != NULL)
+			{
+				tmp = tmp->down;
+			}
+			if (tmp->i < i)	//elem está entre dois outros
+			{
+				elem->down=tmp;
+				elem->up=tmp->up;
+				tmp->up->down=elem;
+				tmp->up = elem;
+			}
+			else	//elem é o último elemento
+			{
+				elem->up = tmp;
+				tmp->down = elem;
+			}
+		}
+	}
+
+	mat->linhas[i].n_elem++;
+	mat->colunas[j].n_elem++;
 }
-//-------------------------------------------------------------------------//
+
 void remove_elem(int i, int j, T_MAT *mat){
 	//Essa função recebe um número de linha, um de coluna e uma matriz e
 	//zera o elemento daquela posição na matriz
 }
 
-T_ELEM *acessa_fila(T_FILA fila, int pos, char l_c){//l_c ascessa linha ou coluna
+T_ELEM *acessa_fila(T_FILA fila, int pos, char l_c){//l_c acessa linha ou coluna
 	//Essa função acessa o item na posição pos (índice 0) de uma fila
 	//(linha caso l_c == 'l' e coluna caso l_c == 'c') e retorna ponteiro
 	//para o elemento daquela posição. Retorna NULL caso seja 0.
@@ -169,13 +259,13 @@ T_ELEM *encontra_elem(T_MAT *mat, int i, int j)
 	//retorna um ponteiro para esse elemento. retorna NULL caso ele seja
 	//igual a zero
 	T_ELEM *elem;
-	if(mat->linhas.fila[i].n_elem < mat->colunas.fila[j].n_elem)
+	if(mat->linhas[i].n_elem < mat->colunas[j].n_elem)
 	{
-		elem = acessa_linha(mat->linhas.fila[i], j);
+		elem = acessa_linha(mat->linhas[i], j);
 	}
 	else
 	{
-		elem = acessa_coluna(mat->colunas.fila[j], i);
+		elem = acessa_coluna(mat->colunas[j], i);
 	}
 	return elem;
 
