@@ -13,6 +13,8 @@ void apaga_matriz(T_MAT *mat);
 double le_elem(int i, int j, T_MAT *mat);
 void adiciona_elem(int i, int j, double valor, T_MAT *mat);
 void remove_elem(int i, int j, T_MAT *mat);
+double soma_linha(int i,T_MAT*mat);
+double soma_coluna(int j,T_MAT*mat);
 
 //funções privadas
 T_ELEM *acessa_fila(T_FILA fila, int pos, char l_c);
@@ -281,4 +283,38 @@ T_ELEM *encontra_elem(T_MAT *mat, int i, int j)
 	}
 	return elem;
 
+}
+
+double soma_linha(int i,T_MAT*mat)//i:numero da linha
+{
+double soma=0;
+
+if(mat->linhas[i].n_elem!=0)
+    {
+    T_ELEM *aux;
+    aux=mat->linhas[i].first;
+    
+    while(aux!=NULL){
+        soma+=aux->valor;
+        aux=aux.right;
+        }
+    }
+return (soma);
+}
+
+double soma_coluna(int j,T_MAT*mat)//j:numero da coluna
+{
+double soma=0;
+
+if(mat->colunas[j].n_elem!=0)
+    {
+    T_ELEM *aux;
+    aux=mat->colunas[j].first;
+    
+    while(aux!=NULL){
+        soma+=aux->valor;
+        aux=aux.down;
+        }
+    }
+return (soma);
 }
