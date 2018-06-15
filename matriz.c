@@ -311,25 +311,54 @@ double determinante(T_MAT *mat)
 	{
 		return mat->linhas[0].first->valor;
 	}
-		
-	//Caso fila de zeros
+
+	//Teorema de Laplace
+	//Encontra menor fila
+
+	int min;	//número de elementos da menor fila
+	min = mat->linhas[0].n_elem;
+	char l_c = 'l';	//'l'==linha, 'c'==coluna
+	int n_fila;	//posição da menor fila
+
 	int i;
 	for (i=0; i < mat->m; i++)
 	{
-		if(mat->linhas[i].first == NULL){return 0.0;}
-		if(mat->colunas[i].first == NULL){return 0.0;}
+		if(mat->linhas[i].n_elem < min)
+			{
+				min = mat->linhas[i].n_elem;
+				l_c = 'l';
+				n_fila=i;
+			}
+		if(mat->colunas[i].n_elem < min)
+			{
+				min = mat->colunas[i].n_elem;
+				l_c = 'c';
+				n_fila=i;
+			}
 	}
+	if (min==0){return 0.0;}	//Caso fila de 0s, det==0
 
-	//Teorema de Laplace
+	//Aplica a regra
 	double det = 0.0;
-	char neg = 1;	//Sinal que alterna
+	char neg;	//Sinal que alterna
+	if(n_fila%2==0){neg = 1;}
+	else {neg = -1;}
 	T_MAT *new;
 	for (i=0; i < mat->m; i++, neg*=-1)
 	{
-		//OTIMIZAR PARA MENOR FILA
-		new = remove_lin_col(0,i,mat);
-		det += neg*determinante(new);
-		apaga_matriz(new);
+		if(l_c=='l')
+		{
+			new = remove_lin_col(n_fila,i,mat);
+			det += neg*determinante(new);
+			apaga_matriz(new);
+		}
+		if(l_c=='c')
+		{
+			new = remove_lin_col(i,n_fila,mat);
+			det += neg*determinante(new);
+			apaga_matriz(new);
+		}
+
 	}
 	return det;
 }
@@ -406,35 +435,42 @@ T_MAT *remove_lin_col(int i, int j, T_MAT *mat)
 	T_MAT *new;
 	new = cria_matriz(mat->m -1, mat->n -1);
 	int iii;
-	int jjj;
 	double valor;
-	//Copia os elementos de mat ajustados segundo o corte
-	for (iii=0; iii < new->m; iii++)
+	T_ELEM *tmp;
+	for(iii=0; iii < i; iii++)	//Linhas antes do corte
 	{
-		for(jjj=0; jjj < new->n; jjj++)
+		tmp = mat->linhas[iii].first;
+		while(tmp!=NULL)
 		{
-			if (iii<i && jjj<j)	//Região antes do corte
+			if(tmp->j < j)	//Colunas antes do corte
 			{
-				valor = le_elem(i,j,mat);
+				valor = tmp->valor;
 				adiciona_elem(i,j,valor,new);
 			}
-			if (iii<i && jjj>j)	//A direita do corte
+			else	//colunas depois do corte
 			{
-				valor = le_elem(i,j,mat);
+				valor = tmp->valor;
 				adiciona_elem(i,j-1,valor,new);
 			}
-			if (iii>i && jjj<j)	//Abaixo do corte
-			{
-				valor = le_elem(i,j,mat);
-				adiciona_elem(i-1,j,valor,new);
-			}
-			if (iii>i && jjj>j)	//Região depois do corte
-			{
-				valor = le_elem(i,j,mat);
-				adiciona_elem(i-1,j-1,valor,new);
-			}
-
 		}
 	}
+	for(iii=i+1; iii > i && iii < mat->m; iii++)	//Linhas depois do corte
+	{
+		tmp = mat->linhas[iii].first;
+		while(tmp!=NULL)
+		{
+			if(tmp->j < j)	//Colunas antes do corte
+			{
+				valor = tmp->valor;
+				adiciona_elem(i-1,j,valor,new);
+			}
+			else	//colunas depois do corte
+			{
+				valor = tmp->valor;
+				adiciona_elem(i-1,j-1,valor,new);
+			}
+		}
+	}
+
 	return new;
 }

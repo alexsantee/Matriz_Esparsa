@@ -1,0 +1,8 @@
+Alex Santee (p=0)				10392226
+Felipe Bordin (p=1)			10716421
+Leonardo Rodrigues (p=2)		10716380
+Arthur Schmidt (p=3)			10716376
+
+Este trabalho tem o fim de montar um programa capaz de guardar e processar
+matrizes esparsas com grandes números de linhas e colunas sem que o computador
+sofra com falta de memória ou com tempos muito longos de processamento.
