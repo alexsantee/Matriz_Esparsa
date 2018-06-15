@@ -2,6 +2,7 @@
 
 #define ERR_OUT_OF_MATRIX -1
 #define ERR_NON_SQR_MAT_DET -2
+
 //structs públicos
 typedef struct matriz T_MAT;
 
@@ -10,21 +11,23 @@ typedef struct fila T_FILA;
 typedef struct elemento T_ELEM;
 
 //funções públicas
-T_MAT *cria_matriz(int m, int n);
-void apaga_matriz(T_MAT *mat);
-double le_elem(int i, int j, T_MAT *mat);
-void adiciona_elem(int i, int j, double valor, T_MAT *mat);
-void remove_elem(int i, int j, T_MAT *mat);
-double soma_linha(int i,T_MAT*mat);
-double soma_coluna(int j,T_MAT*mat);
-double determinante(T_MAT *mat);
+T_MAT *cria_matriz(int m, int n);	//Cria matriz de tamanho mn e dá ponteiro para ela
+void apaga_matriz(T_MAT *mat);	//Limpa memória reservada para uma matriz
+double le_elem(int i, int j, T_MAT *mat);	//Dá o valor do elemento na posição ij
+void adiciona_elem(int i, int j, double valor, T_MAT *mat);	//Define/substitui valor de ij
+void remove_elem(int i, int j, T_MAT *mat);	//Remove elemento da posição ij
+double soma_linha(int i,T_MAT*mat);	//Retorna a soma da linha i
+double soma_coluna(int j,T_MAT*mat);	//Retorna a soma da coluna j
+double determinante(T_MAT *mat);	//Calcula o determinante de uma matriz quadrada
+
 
 //funções privadas
+//Retorna elemento da fila em pos. 'l' procura em linha e 'c' coluna
 T_ELEM *acessa_fila(T_FILA fila, int pos, char l_c);
-T_ELEM *acessa_linha(T_FILA linha, int j);
-T_ELEM *acessa_coluna(T_FILA coluna, int i);
-T_ELEM *encontra_elem(T_MAT *mat, int i, int j);
-T_MAT *remove_lin_col(int i, int j, T_MAT *mat);
+T_ELEM *acessa_linha(T_FILA linha, int j);	//Retorna elemento da fila em j
+T_ELEM *acessa_coluna(T_FILA coluna, int i);	//Retorna elemento da fila em i
+T_ELEM *encontra_elem(T_MAT *mat, int i, int j);	//Retorna elemento na posição ij
+T_MAT *remove_lin_col(int i, int j, T_MAT *mat);	//Dá uma cópia da matriz sem as filas ij
 
 /*
 Este programa usa a seguinte estrutura de dados para guardar os elementos de
