@@ -1,7 +1,8 @@
 #include <stdlib.h>	//Usado para reservar memória para a matriz
 
-#define ERR_OUT_OF_MATRIX -1
-#define ERR_NON_SQR_MAT_DET -2
+#define ERR_OUT_OF_MATRIX 1
+#define ERR_NON_SQR_MAT_DET 2
+#define ERR_OUT_OF_MEMORY 3
 
 //structs públicos
 typedef struct matriz T_MAT;
@@ -96,10 +97,12 @@ T_MAT *cria_matriz(int m, int n){
 	//Cria uma matriz de tamanho mn e retorna ponteiro para ela
 	T_MAT *mat;
 	mat = calloc(1,sizeof(T_MAT));
+	if (mat==NULL){exit(ERR_OUT_OF_MEMORY);}
 	mat->m = m;
 	mat->n = n;
 	mat->linhas = calloc(m, sizeof(T_FILA));
 	mat->colunas = calloc(n, sizeof(T_FILA));
+	if(mat->linhas==NULL || mat->colunas==NULL) {exit(ERR_OUT_OF_MEMORY);}
 	return mat;
 }
 
@@ -170,6 +173,7 @@ void adiciona_elem(int i, int j, double valor, T_MAT *mat){
 
 	//Será de fato adicionado um novo elemento
 	elem = calloc(1, sizeof(T_ELEM));
+	if(elem==NULL){exit(ERR_OUT_OF_MEMORY);}
 	elem->i = i;
 	elem->j = j;
 
