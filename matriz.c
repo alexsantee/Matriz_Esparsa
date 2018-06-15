@@ -58,7 +58,7 @@ uma matriz esparsa:
               |
 As setas => e V representam vetores de ponteiros, sendo que os ponteiros que
 elas contém apontam para o primeiro elemento de uma dada linha/coluna. além
-de guardar esses ponteiros, essa extrutura guarda seu próprio tamanho. 
+de guardar esses ponteiros, essa estrutura guarda seus tamanhos. 
 
               |
 As setas -> e v representam ponteiros para o primeiro elemento daquela linha/
@@ -93,6 +93,7 @@ struct matriz{
 };
 
 T_MAT *cria_matriz(int m, int n){
+	//Cria uma matriz de tamanho mn e retorna ponteiro para ela
 	T_MAT *mat;
 	mat = calloc(1,sizeof(T_MAT));
 	mat->m = m;
@@ -121,6 +122,8 @@ void apaga_matriz(T_MAT *mat)
 	//Limpa os vetores de filas
 	free(mat->linhas);
 	free(mat->colunas);
+	//Limpa a matriz
+	free(mat);
 }
 
 int n_linhas(T_MAT *mat)
@@ -145,7 +148,7 @@ double le_elem(int i, int j, T_MAT *mat){
 }
 
 void adiciona_elem(int i, int j, double valor, T_MAT *mat){
-	//matriz e insere valor como elemento daquela posição na matriz
+	//Adiciona/modifica o valor do elemento ij
 
 	if(i >= mat->m || j >= mat->n || i<0 || j<0)	//Elemento fora da matriz
 	{
@@ -191,7 +194,7 @@ void adiciona_elem(int i, int j, double valor, T_MAT *mat){
 			{
 				tmp = tmp->right;
 			}
-			if (tmp->j < j)	//elem está entre dois outros
+			if (tmp->j > j)	//elem está entre dois outros
 			{
 				elem->right=tmp;
 				elem->left=tmp->left;
@@ -207,11 +210,11 @@ void adiciona_elem(int i, int j, double valor, T_MAT *mat){
 	}
 
 	//Adiciona elemento na coluna
-	if(mat->colunas[j].n_elem == 0)	//A linha está vazia
+	if(mat->colunas[j].n_elem == 0)	//A coluna está vazia
 	{
 		mat->colunas[j].first = elem;
 	}
-	else	//Já existe(m) elemento(s) na linha
+	else	//Já existe(m) elemento(s) na coluna
 	{
 		T_ELEM *tmp;
 		tmp = mat->colunas[j].first;	//Primeiro elemento
@@ -227,7 +230,7 @@ void adiciona_elem(int i, int j, double valor, T_MAT *mat){
 			{
 				tmp = tmp->down;
 			}
-			if (tmp->i < i)	//elem está entre dois outros
+			if (tmp->i > i)	//elem está entre dois outros
 			{
 				elem->down=tmp;
 				elem->up=tmp->up;
@@ -300,7 +303,7 @@ return (soma);
 double determinante(T_MAT *mat)
 {
 	//Calcula o determinante de uma matriz quadrada
-	if (mat->m!=mat->n)	//Caso matriz não quadrada
+	if (mat->m != mat->n)	//Caso matriz não quadrada
 	{
 		exit(ERR_NON_SQR_MAT_DET);
 	}
@@ -320,10 +323,13 @@ double determinante(T_MAT *mat)
 	//Teorema de Laplace
 	double det = 0.0;
 	char neg = 1;	//Sinal que alterna
+	T_MAT *new;
 	for (i=0; i < mat->m; i++, neg*=-1)
 	{
 		//OTIMIZAR PARA MENOR FILA
-		det += neg*determinante( remove_lin_col(i,1,mat) );
+		new = remove_lin_col(0,i,mat);
+		det += neg*determinante(new);
+		apaga_matriz(new);
 	}
 	return det;
 }
@@ -394,6 +400,9 @@ T_ELEM *encontra_elem(T_MAT *mat, int i, int j)
 
 T_MAT *remove_lin_col(int i, int j, T_MAT *mat)
 {
+	//Cria uma matriz e copia os elementos da primeira matriz de forma que
+	//a nova seja a primeira removida das linha e coluna i e j.
+	//Retorna ponteiro para essa nova matriz.
 	T_MAT *new;
 	new = cria_matriz(mat->m -1, mat->n -1);
 	int iii;
