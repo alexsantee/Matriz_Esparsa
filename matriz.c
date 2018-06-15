@@ -103,9 +103,22 @@ T_MAT *cria_matriz(int m, int n){
 void apaga_matriz(T_MAT *mat)
 {
 	//Limpa todos os endereços reservados da memória.
-
-	//NÃO ESQUECER
-
+	int i;
+	T_ELEM *cur;
+	T_ELEM *tmp;
+	for(i=0; i < mat->m; i++)	//Limpa os elementos
+	{
+		cur = mat->linhas[i].first;
+		while(cur!=NULL)
+		{
+			tmp = cur->right;
+			free(cur);
+			cur = tmp;
+		}
+	}
+	//Limpa os vetores de filas
+	free(mat->linhas);
+	free(mat->colunas);
 }
 
 double le_elem(int i, int j, T_MAT *mat){
