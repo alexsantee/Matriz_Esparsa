@@ -147,7 +147,7 @@ double le_elem(int i, int j, T_MAT *mat){
 void adiciona_elem(int i, int j, double valor, T_MAT *mat){
 	//matriz e insere valor como elemento daquela posição na matriz
 
-	if(i >= mat->m || j >= mat->n)	//Elemento fora da matriz
+	if(i >= mat->m || j >= mat->n || i<0 || j<0)	//Elemento fora da matriz
 	{
 		exit(ERR_OUT_OF_MATRIX);
 	}
@@ -374,6 +374,11 @@ T_ELEM *encontra_elem(T_MAT *mat, int i, int j)
 	//Essa função recebe uma matriz e as posições i e j de um elemento e
 	//retorna um ponteiro para esse elemento. retorna NULL caso ele seja
 	//igual a zero
+	if( i>=mat->m || j>=mat->n || i<0 || j<0)	//Elemento fora da matriz
+	{
+		exit(ERR_OUT_OF_MATRIX);
+	}
+
 	T_ELEM *elem;
 	if(mat->linhas[i].n_elem < mat->colunas[j].n_elem)
 	{
