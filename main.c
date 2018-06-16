@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
             existe_matriz=1;
             pause();
             }
-		if(resp_user == '2')
+		else if(resp_user == '2')
             {
             printf("***** Setor de exclusão de matriz *****\n");
             apaga_matriz(mat);
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
             existe_matriz=0;
             pause();
             }
-		if(resp_user == '3')
+		else if(resp_user == '3')
             {
                 if(existe_matriz==1)
                 {
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
                         pause();
                     }
             }
-        if(resp_user == '4')
+        else if(resp_user == '4')
             {
                 if(existe_matriz==1)
                 {
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
                         pause();
                     }
             }
-		if(resp_user == '5')
+		else if(resp_user == '5')
             {
                 if(existe_matriz==1)
                 {
@@ -88,7 +88,7 @@ int main(int argc, char *argv[]){
                         pause();
                     }
             }
-        if(resp_user == '6')
+        else if(resp_user == '6')
             {
                 if(existe_matriz==1)
                 {
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]){
                         pause();
                     }
             }
-		if(resp_user == '7')
+		else if(resp_user == '7')
             {
                 if(existe_matriz==1)
                 {
@@ -133,7 +133,8 @@ int main(int argc, char *argv[]){
                     }
             }
         }while(resp_user !='0');
-
+	if (existe_matriz == 1){apaga_matriz(mat);}
+	existe_matriz = 0;
 	return 0;
 }
 

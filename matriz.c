@@ -176,6 +176,7 @@ void adiciona_elem(int i, int j, double valor, T_MAT *mat){
 	if(elem==NULL){exit(ERR_OUT_OF_MEMORY);}
 	elem->i = i;
 	elem->j = j;
+	elem->valor = valor;
 
 	//Adiciona elemento na linha
 	if(mat->linhas[i].n_elem == 0)	//A linha está vazia
@@ -272,6 +273,8 @@ void remove_elem(int i, int j, T_MAT *mat){
 
 double soma_linha(int i,T_MAT*mat)//i:numero da linha
 {
+if(i >= mat->m || i < 0){exit(ERR_OUT_OF_MATRIX);}
+
 double soma=0;
 
 if(mat->linhas[i].n_elem!=0)
@@ -289,6 +292,8 @@ return (soma);
 
 double soma_coluna(int j,T_MAT*mat)//j:numero da coluna
 {
+if(j >= mat->n || j< 0){exit(ERR_OUT_OF_MATRIX);}
+
 double soma=0;
 
 if(mat->colunas[j].n_elem!=0)
