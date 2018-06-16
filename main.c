@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
             {
             printf("***** Setor de exclusão de matriz *****\n");
             apaga_matriz(mat);
-            printf("Matriz excluida.");
+            printf("Matriz excluida.\n");
             existe_matriz=0;
             pause();
             }
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
                 printf("Qual valor:\n");
                 scanf(" %lf",&valor);
                 adiciona_elem(i,j,valor, mat);
-                printf("Na posição %d,%d o valor colocado foi %lf.\n",i,j,valor);
+                printf("Na posição %d,%d o valor colocado foi %.2lf.\n",i,j,valor);
                 pause();
                 }else
                     {
@@ -167,8 +167,9 @@ void clear()
 
 void pause()
 {
+	getchar();	//Retira o \n
     char pausa;
     printf("Aperte enter");
-    while( ( pausa=getchar() ) != '\n' && pausa != '\0');   //Pula caracteres lixo
+    while( (( pausa=getchar() ) != '\n') && (pausa != '\0'));   //Pula caracteres lixo
 	clear();
 }
