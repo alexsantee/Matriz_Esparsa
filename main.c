@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
                 printf("Insira o valor da posição i:\n");
                 scanf(" %d",&j);
                 valor = le_elem(i,j,mat);
-                printf("Na posição %d,%d o valor do elmento é %0.2ld.\n",valor);
+                printf("Na posição %d,%d o valor do elmento é %.2lf.\n",i,j,valor);
                 pause();
                 }else
                     {
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]){
                 printf("Qual linha:\n");
                 scanf(" %d",&i);
                 valor = soma_linha( i,mat);
-                printf("O valor da  soma dos valores da linha %d é %0.2ld.\n",i,valor);
+                printf("O valor da  soma dos valores da linha %d é %.2lf.\n",i,valor);
                 pause();
                 }else
                     {
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]){
                 printf("Qual coluna:\n");
                 scanf(" %d",&i);
                 valor = soma_coluna(j,mat);
-                printf("O valor da  soma dos valores da coluna %d é %0.2ld.\n",j,valor);
+                printf("O valor da  soma dos valores da coluna %d é %0.2lf.\n",j,valor);
                 pause();
                 }else
                     {
@@ -99,9 +99,9 @@ int main(int argc, char *argv[]){
                 printf("Insira o valor da posição j:\n");
                 scanf(" %d",&j);
                 printf("Qual valor:\n");
-                scanf(" ld",&valor);
+                scanf(" %lf",&valor);
                 adiciona_elem(i,j,valor, mat);
-                printf("Na posição %d,%d o valor colocado foi %ld.\n",i,j,valor);
+                printf("Na posição %d,%d o valor colocado foi %lf.\n",i,j,valor);
                 pause();
                 }else
                     {
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]){
                     {
                     printf("***** Setor do determinante *****\n");
                     valor = determinante(mat);
-                    printf("O valor do determinante é : 0.2ld \n",valor);
+                    printf("O valor do determinante é : %.2lf \n",valor);
                     pause();
                     }else
                     {
