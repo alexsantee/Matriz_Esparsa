@@ -1,6 +1,5 @@
 #include <stdio.h>	//usado na interação com o usuário
-#include <locale.h> //usado para colocar a escrida em português
-#include <stdlib.h>
+#include <stdlib.h>	//usado para chamadas com o sistema
 
 #include "matriz.h" //usado para administrar as matrizes
 
@@ -21,12 +20,12 @@ int main(int argc, char *argv[]){
 		resp_user = menu();
 		if(resp_user == '1')
             {
-            printf("***** Setor de crição de matriz *****\n");
-            printf("Insira o valor m(numero de linhas da matriz:");
+            printf("***** Setor de criação de matriz *****\n");
+            printf("Insira o valor m(numero de linhas da matriz): ");
             scanf(" %d",&m);
-            printf("Insira o valor n(numero de calonas da matriz:");
+            printf("Insira o valor n(numero de calonas da matriz): ");
             scanf(" %d",&n);
-            mat = cria_matriz(m,n);	//Cria matriz de tamanho mn e dá ponteiro para ela
+            mat = cria_matriz(m,n);
             printf("Matriz criada.\n");
             existe_matriz=1;
             pause();
@@ -44,16 +43,16 @@ int main(int argc, char *argv[]){
                 if(existe_matriz==1)
                 {
                 printf("***** Setor de valor de uma posição *****\n");
-                printf("Insira o valor da posição j:\n");
-                scanf(" %d",&i);
                 printf("Insira o valor da posição i:\n");
+                scanf(" %d",&i);
+                printf("Insira o valor da posição j:\n");
                 scanf(" %d",&j);
                 valor = le_elem(i,j,mat);
                 printf("Na posição %d,%d o valor do elmento é %.2lf.\n",i,j,valor);
                 pause();
                 }else
                     {
-                        printf("Você não defeniu matriz.");
+                        printf("Você não definiu matriz.");
                         pause();
                     }
             }
@@ -69,7 +68,7 @@ int main(int argc, char *argv[]){
                 pause();
                 }else
                     {
-                        printf("Você não defeniu matriz.");
+                        printf("Você não definiu matriz.");
                         pause();
                     }
             }
@@ -79,13 +78,13 @@ int main(int argc, char *argv[]){
                 {
                 printf("***** Setor de soma dos valores de uma coluna *****\n");
                 printf("Qual coluna:\n");
-                scanf(" %d",&i);
+                scanf(" %d",&j);
                 valor = soma_coluna(j,mat);
                 printf("O valor da  soma dos valores da coluna %d é %0.2lf.\n",j,valor);
                 pause();
                 }else
                     {
-                        printf("Você não defeniu matriz.");
+                        printf("Você não definiu matriz.");
                         pause();
                     }
             }
@@ -105,7 +104,7 @@ int main(int argc, char *argv[]){
                 pause();
                 }else
                     {
-                        printf("Você não defeniu matriz.");
+                        printf("Você não definiu matriz.");
                         pause();
                     }
             }
@@ -147,10 +146,10 @@ char menu()
         printf("1.Criação da matriz m por n.\n");
         printf("2.Exclusão da matriz.\n");
         printf("3.Consulta dos valores de uma posição (i, j) da matriz.\n");
-        printf("4.Consulta da soma dos valores de cada linha da matriz.\n");
-        printf("5.Consulta da soma dos valores de cada coluna da matriz\n");
-        printf("6. Atribuição de um valor na posição (i, j) da matriz\n");
-        printf("7. Calcular o determinante da matriz (2.0)\n");
+        printf("4.Consulta da soma dos valores de uma linha da matriz.\n");
+        printf("5.Consulta da soma dos valores de uma coluna da matriz\n");
+        printf("6.Atribuição de um valor na posição (i, j) da matriz\n");
+        printf("7.Calcular o determinante da matriz\n");
         printf("0.Sair\n");
         scanf(" %c", &resp);
         }while(resp<'0'||resp>'7');
@@ -171,4 +170,5 @@ void pause()
     char pausa;
     printf("Aperte enter");
     while( ( pausa=getchar() ) != '\n' && pausa != '\0');   //Pula caracteres lixo
+	clear();
 }
